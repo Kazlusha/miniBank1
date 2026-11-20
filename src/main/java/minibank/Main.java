@@ -3,9 +3,9 @@ package minibank;
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        TransferService transferService = new TransferService();
 
         System.out.println("=== МИНИ-БАНК ===");
         System.out.print("Введите номер счёта: ");
@@ -21,6 +21,7 @@ public class Main {
         System.out.println("1 - Дебетовый (DebitAccount)");
         System.out.println("2 - Сберегательный (SavingsAccount)");
         System.out.println("3 - Кредитный (CreditAccount)");
+        System.out.println("4. Перевести на другой счёт");
         int type = readInt(scanner);
 
         BankAccount account;
@@ -45,6 +46,7 @@ public class Main {
             System.out.println("1. Пополнить (deposit)");
             System.out.println("2. Снять (withdraw)");
             System.out.println("3. Показать баланс");
+            System.out.println("4. Перевести на другой счёт");
             System.out.println("0. Выход");
             System.out.print("Выбор: ");
 
@@ -71,6 +73,31 @@ public class Main {
 
                 case 3:
                     System.out.println("Текущий баланс: " + account.getBalance());
+                    break;
+                case 4:
+                    System.out.println("=== Перевод ===");
+                    System.out.print("Введите номер счёта получателя: ");
+                    String toNumber = scanner.nextLine();
+                    System.out.print("Введите имя владельца получателя: ");
+                    String toOwner = scanner.nextLine();
+                    System.out.print("Начальный баланс получателя: ");
+                    double toBalance = readDouble(scanner);
+
+                    BankAccount recipient = new DebitAccount(toNumber, toOwner, toBalance);
+
+                    System.out.print("Сумма перевода: ");
+                    double transferAmount = readDouble(scanner);
+
+                    boolean transferOk = transferService.transfer(account, recipient, transferAmount);
+                    if (transferOk) {
+                        System.out.println("✅ Перевод успешен.");
+                        System.out.println("   Баланс отправителя: " + account.getBalance());
+                        System.out.println("   Баланс получателя:  " + recipient.getBalance());
+                    } else {
+                        System.out.println("❌ Перевод отклонён.");
+                        System.out.println("   Баланс отправителя: " + account.getBalance());
+                        System.out.println("   Баланс получателя:  " + recipient.getBalance());
+                    }
                     break;
 
                 case 0:
