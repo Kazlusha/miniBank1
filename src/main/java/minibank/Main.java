@@ -91,7 +91,8 @@ public class Main {
                     CommissionPolicy displayPolicy = new PercentCommission(0.01);
                     double commission = displayPolicy.calculate(transferAmount);
                     System.out.println("Комиссия: " + commission + ", Итого к списанию: " + (transferAmount + commission));
-
+                    DebitAccount acc = new DebitAccount("001", "Ivan", 10000);
+                    System.out.println(acc);
                     boolean transferOk = transferService.transfer(account, recipient, transferAmount);
                     if (transferOk) {
                         System.out.println("✅ Перевод успешен.");

@@ -78,4 +78,13 @@ class DebitAccountTest {
         assertFalse(result, "Снятие отрицательной суммы запрещено");
         assertEquals(1000, account.getBalance());
     }
+    @Test
+    void toStringReturnsReadableRepresentation() {
+        DebitAccount account = new DebitAccount("001", "Ivan", 10000);
+
+        String result = account.toString();
+
+        assertEquals("DebitAccount{number='001', owner='Ivan', balance=10000.0}", result,
+                "toString() должен возвращать читаемую строку с именем класса и полями");
+    }
 }
