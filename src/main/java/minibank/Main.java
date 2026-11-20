@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        TransferService transferService = new TransferService();
+        TransferService transferService = new TransferService(new PercentCommission(0.01));
 
         System.out.println("=== МИНИ-БАНК ===");
         System.out.print("Введите номер счёта: ");
@@ -21,7 +21,6 @@ public class Main {
         System.out.println("1 - Дебетовый (DebitAccount)");
         System.out.println("2 - Сберегательный (SavingsAccount)");
         System.out.println("3 - Кредитный (CreditAccount)");
-        System.out.println("4. Перевести на другой счёт");
         int type = readInt(scanner);
 
         BankAccount account;
@@ -40,6 +39,7 @@ public class Main {
 
         System.out.println("\nСчёт создан: " + account.getOwner()
                 + " | Баланс: " + account.getBalance());
+
 
         while (true) {
             System.out.println("\n--- МЕНЮ ---");
@@ -88,6 +88,10 @@ public class Main {
                     System.out.print("Сумма перевода: ");
                     double transferAmount = readDouble(scanner);
 
+                    CommissionPolicy displayPolicy = new PercentCommission(0.01);
+                    double commission = displayPolicy.calculate(transferAmount);
+                    System.out.println("Комиссия: " + commission + ", Итого к списанию: " + (transferAmount + commission));
+
                     boolean transferOk = transferService.transfer(account, recipient, transferAmount);
                     if (transferOk) {
                         System.out.println("✅ Перевод успешен.");
@@ -99,6 +103,7 @@ public class Main {
                         System.out.println("   Баланс получателя:  " + recipient.getBalance());
                     }
                     break;
+
 
                 case 0:
                     System.out.println("Выход...");

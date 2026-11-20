@@ -1,6 +1,14 @@
 package minibank;
 
 public class TransferService {
+    private final CommissionPolicy commissionPolicy;
+
+    public TransferService(CommissionPolicy commissionPolicy) {
+        if (commissionPolicy == null) {
+            throw new IllegalArgumentException("Политика комиссии не может быть нулевой");
+        }
+        this.commissionPolicy = commissionPolicy;
+    }
 
     public boolean transfer(BankAccount from, BankAccount to, double amount) {
         if (amount <= 0) {
@@ -11,11 +19,15 @@ public class TransferService {
             return false;
         }
 
-        boolean withdrawn = from.withdraw(amount);
-        if (!withdrawn) {
+        double commission = commissionPolicy.calculate(amount);
+        double totalToWithdraw = amount + commission;
+
+        if (!from.withdraw(totalToWithdraw)) {
             return false;
         }
         to.deposit(amount);
         return true;
     }
 }
+
+
