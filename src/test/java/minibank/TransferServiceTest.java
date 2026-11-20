@@ -160,4 +160,47 @@ class TransferServiceTest {
         assertEquals(2000, from.getBalance());
         assertEquals(4000, to.getBalance());
     }
+
+    @Test
+    void successfulTransferSendsExactlyOneNotification() {
+        DebitAccount from = new DebitAccount("A", "Ivan", 10000);
+        DebitAccount to = new DebitAccount("B", "Petr", 0);
+        FakeNotificationService notificationService = new FakeNotificationService();
+        TransferService service = new TransferService(new NoCommission(), notificationService);
+
+        boolean result = service.transfer(from, to, 3000);
+
+        assertTrue(result);
+        assertEquals(1, notificationService.getNotificationCount(),
+                "После успешного перевода должно быть ровно одно уведомление");
+    }
+
+    @Test
+    void failedTransferDoesNotSendNotification() {
+        DebitAccount from = new DebitAccount("A", "Ivan", 1000);
+        DebitAccount to = new DebitAccount("B", "Petr", 0);
+        FakeNotificationService notificationService = new FakeNotificationService();
+        TransferService service = new TransferService(new NoCommission(), notificationService);
+
+        boolean result = service.transfer(from, to, 3000);
+
+        assertFalse(result);
+        assertEquals(0, notificationService.getNotificationCount(),
+                "При неуспешном переводе уведомление не отправляется");
+    }
+
+    @Test
+    void notificationMessageContainsTransferAmount() {
+        DebitAccount from = new DebitAccount("A", "Ivan", 10000);
+        DebitAccount to = new DebitAccount("B", "Petr", 0);
+        FakeNotificationService notificationService = new FakeNotificationService();
+        TransferService service = new TransferService(new NoCommission(), notificationService);
+
+        boolean result = service.transfer(from, to, 3000);
+
+        assertTrue(result);
+        String expectedMessage = "Трансфер 3000.0 завершен";
+        assertEquals(expectedMessage, notificationService.getLastMessage(),
+                "Текст уведомления должен соответствовать ожидаемому");
+    }
 }
