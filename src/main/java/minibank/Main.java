@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        TransferService transferService = new TransferService(new PercentCommission(0.01));
+        TransferService transferService = new TransferService(new PercentCommission(0.01), new ConsoleNotificationService());
 
         System.out.println("=== МИНИ-БАНК ===");
         System.out.print("Введите номер счёта: ");

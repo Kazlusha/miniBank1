@@ -2,12 +2,17 @@ package minibank;
 
 public class TransferService {
     private final CommissionPolicy commissionPolicy;
+    private final NotificationService notificationService;
 
-    public TransferService(CommissionPolicy commissionPolicy) {
+    public TransferService(CommissionPolicy commissionPolicy, NotificationService notificationService) {
         if (commissionPolicy == null) {
             throw new IllegalArgumentException("Политика комиссии не может быть нулевой");
         }
+        if (notificationService == null) {
+            throw new IllegalArgumentException("Cервис уведомлений не может быть нулевым");
+        }
         this.commissionPolicy = commissionPolicy;
+        this.notificationService = notificationService;
     }
 
     public boolean transfer(BankAccount from, BankAccount to, double amount) {
@@ -26,6 +31,8 @@ public class TransferService {
             return false;
         }
         to.deposit(amount);
+
+        notificationService.notify("Трансфер " + amount + " завершен");
         return true;
     }
 }
