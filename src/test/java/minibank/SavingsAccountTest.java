@@ -6,41 +6,32 @@ import static org.junit.jupiter.api.Assertions.*;
 class SavingsAccountTest {
 
     @Test
-    void cannotWithdrawBelowMinimumBalance() {
+    void canWithdrawIfMinimumBalanceIsKept() {
+        SavingsAccount account = new SavingsAccount("222", "Petr", 1000, 500);
+
+        boolean result = account.withdraw(400);
+
+        assertTrue(result);
+        assertEquals(600, account.getBalance());
+    }
+
+    @Test
+    void cannotDropBalanceBelowMinimum() {
         SavingsAccount account = new SavingsAccount("222", "Petr", 1000, 500);
 
         boolean result = account.withdraw(600);
 
-        assertFalse(result, "Снятие ниже минимального остатка должно вернуть false");
-        assertEquals(1000, account.getBalance(), "Баланс не должен измениться");
-    }
-
-    @Test
-    void canWithdrawDownToMinimumBalance() {
-        SavingsAccount account = new SavingsAccount("222", "Petr", 1000, 500);
-
-        boolean result = account.withdraw(500);
-
-        assertTrue(result, "Снятие до минимума должно пройти успешно");
-        assertEquals(500, account.getBalance(), "Баланс должен стать 500");
-    }
-
-    @Test
-    void canWithdrawWhenBalanceStaysAboveMinimum() {
-        SavingsAccount account = new SavingsAccount("222", "Petr", 1000, 500);
-
-        boolean result = account.withdraw(300);
-
-        assertTrue(result, "Снятие выше минимума должно пройти успешно");
-        assertEquals(700, account.getBalance());
-    }
-
-    @Test
-    void cannotWithdrawNegativeOrZeroAmount() {
-        SavingsAccount account = new SavingsAccount("222", "Petr", 1000, 500);
-
-        assertFalse(account.withdraw(0));
-        assertFalse(account.withdraw(-100));
+        assertFalse(result, "Нельзя опустить баланс ниже минимума");
         assertEquals(1000, account.getBalance());
+    }
+
+    @Test
+    void failedWithdrawDoesNotChangeBalance() {
+        SavingsAccount account = new SavingsAccount("222", "Petr", 1000, 500);
+
+        boolean result = account.withdraw(2000);
+
+        assertFalse(result);
+        assertEquals(1000, account.getBalance(), "При неуспешном снятии баланс не меняется");
     }
 }

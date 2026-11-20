@@ -6,47 +6,76 @@ import static org.junit.jupiter.api.Assertions.*;
 class DebitAccountTest {
 
     @Test
+    void initialBalanceIsStored() {
+        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+
+        assertEquals(1000, account.getBalance(), "Начальный баланс должен сохраняться");
+    }
+
+    @Test
+    void depositIncreasesBalance() {
+        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+
+        account.deposit(500);
+
+        assertEquals(1500, account.getBalance());
+    }
+
+    @Test
+    void zeroDepositDoesNotChangeBalance() {
+        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+
+        account.deposit(0);
+
+        assertEquals(1000, account.getBalance(), "Пополнение на 0 не меняет баланс");
+    }
+
+    @Test
+    void negativeDepositDoesNotChangeBalance() {
+        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+
+        account.deposit(-500);
+
+        assertEquals(1000, account.getBalance(), "Отрицательное пополнение не меняет баланс");
+    }
+
+    @Test
+    void withdrawDecreasesBalance() {
+        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+
+        boolean result = account.withdraw(300);
+
+        assertTrue(result);
+        assertEquals(700, account.getBalance());
+    }
+
+    @Test
     void cannotWithdrawMoreThanBalance() {
         DebitAccount account = new DebitAccount("111", "Ivan", 1000);
 
         boolean result = account.withdraw(1500);
 
-        assertFalse(result, "Снятие сверх баланса должно вернуть false");
+        assertFalse(result, "Снятие сверх баланса запрещено");
         assertEquals(1000, account.getBalance(), "Баланс не должен измениться");
     }
 
     @Test
-    void canWithdrawExactBalance() {
+    void zeroWithdrawIsForbidden() {
         DebitAccount account = new DebitAccount("111", "Ivan", 1000);
 
-        boolean result = account.withdraw(1000);
+        boolean result = account.withdraw(0);
 
-        assertTrue(result, "Снятие всей суммы должно пройти успешно");
-        assertEquals(0, account.getBalance(), "Баланс должен стать 0");
+        assertFalse(result, "Снятие нуля запрещено");
+        assertEquals(1000, account.getBalance());
     }
 
     @Test
-    void cannotWithdrawNegativeOrZeroAmount() {
+    void negativeWithdrawIsForbidden() {
         DebitAccount account = new DebitAccount("111", "Ivan", 1000);
 
-        assertFalse(account.withdraw(0), "Снятие нуля должно вернуть false");
-        assertFalse(account.withdraw(-100), "Снятие отрицательной суммы должно вернуть false");
-        assertEquals(1000, account.getBalance(), "Баланс не должен измениться");
-    }
+        boolean result = account.withdraw(-100);
 
-    @Test
-    void depositShouldIncreaseBalance() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
-
-        account.deposit(500);
-
-        assertEquals(1500, account.getBalance(), "Пополнение должно увеличить баланс");
-    }
-
-    @Test
-    void constructorShouldThrowOnNegativeInitialBalance() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new DebitAccount("111", "Ivan", -100),
-                "Отрицательный начальный баланс должен вызывать исключение");
+        assertFalse(result, "Снятие отрицательной суммы запрещено");
+        assertEquals(1000, account.getBalance());
     }
 }

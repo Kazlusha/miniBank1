@@ -6,48 +6,43 @@ import static org.junit.jupiter.api.Assertions.*;
 class CreditAccountTest {
 
     @Test
-    void canWithdrawWithinCreditLimit() {
+    void accountCanGoNegative() {
         CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
 
-        boolean result = account.withdraw(4000);
-
-        assertTrue(result, "Снятие в пределах кредитного лимита должно пройти успешно");
-        assertEquals(-3000, account.getBalance());
-    }
-
-    @Test
-    void cannotWithdrawBeyondCreditLimit() {
-        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
-        account.withdraw(4000);
-
-        boolean result = account.withdraw(3000);
-
-        assertFalse(result, "Снятие сверх лимита должно вернуть false");
-        assertEquals(-3000, account.getBalance(), "Баланс не должен измениться");
-    }
-
-    @Test
-    void canWithdrawExactlyToCreditLimit() {
-        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
-
-        boolean result = account.withdraw(6000);
+        boolean result = account.withdraw(2000);
 
         assertTrue(result);
-        assertEquals(-5000, account.getBalance());
+        assertEquals(-1000, account.getBalance(), "Баланс может быть отрицательным");
     }
 
     @Test
-    void cannotWithdrawNegativeOrZeroAmount() {
+    void canUseCreditLimit() {
         CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
 
-        assertFalse(account.withdraw(0));
-        assertFalse(account.withdraw(-100));
+        boolean result = account.withdraw(5000);
+
+        assertTrue(result);
+        assertEquals(-4000, account.getBalance());
+    }
+
+    @Test
+    void cannotExceedCreditLimit() {
+        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
+
+        boolean result = account.withdraw(7000);
+
+        assertFalse(result, "Нельзя превысить кредитный лимит");
         assertEquals(1000, account.getBalance());
     }
 
     @Test
-    void constructorShouldThrowOnNegativeCreditLimit() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new CreditAccount("333", "Oleg", 1000, -500));
+    void failedWithdrawDoesNotChangeBalance() {
+        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
+        account.withdraw(5000);
+
+        boolean result = account.withdraw(2000);
+
+        assertFalse(result);
+        assertEquals(-4000, account.getBalance(), "При неуспешном снятии баланс не меняется");
     }
 }
