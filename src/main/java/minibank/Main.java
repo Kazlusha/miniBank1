@@ -9,7 +9,8 @@ public class Main {
 
         System.out.println("=== МИНИ-БАНК ===");
         System.out.print("Введите номер счёта: ");
-        String number = scanner.nextLine();
+        String numberStr = scanner.nextLine();
+        AccountNumber number = new AccountNumber(numberStr);
 
         System.out.print("Введите владельца: ");
         String owner = scanner.nextLine();
@@ -77,9 +78,13 @@ public class Main {
                 case 4:
                     System.out.println("=== Перевод ===");
                     System.out.print("Введите номер счёта получателя: ");
-                    String toNumber = scanner.nextLine();
+                    String toNumberStr = scanner.nextLine();
+                    AccountNumber toNumber = new AccountNumber(toNumberStr);
+
+
                     System.out.print("Введите имя владельца получателя: ");
                     String toOwner = scanner.nextLine();
+
                     System.out.print("Начальный баланс получателя: ");
                     double toBalance = readDouble(scanner);
 
@@ -91,8 +96,7 @@ public class Main {
                     CommissionPolicy displayPolicy = new PercentCommission(0.01);
                     double commission = displayPolicy.calculate(transferAmount);
                     System.out.println("Комиссия: " + commission + ", Итого к списанию: " + (transferAmount + commission));
-                    DebitAccount acc = new DebitAccount("001", "Ivan", 10000);
-                    System.out.println(acc);
+
                     boolean transferOk = transferService.transfer(account, recipient, transferAmount);
                     if (transferOk) {
                         System.out.println("✅ Перевод успешен.");

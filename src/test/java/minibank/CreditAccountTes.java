@@ -7,7 +7,7 @@ class CreditAccountTest {
 
     @Test
     void accountCanGoNegative() {
-        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
+        CreditAccount account = new CreditAccount(new AccountNumber("0000000003"), "Oleg", 1000, 5000);
 
         boolean result = account.withdraw(2000);
 
@@ -17,7 +17,7 @@ class CreditAccountTest {
 
     @Test
     void canUseCreditLimit() {
-        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
+        CreditAccount account = new CreditAccount(new AccountNumber("0000000003"), "Oleg", 1000, 5000);
 
         boolean result = account.withdraw(5000);
 
@@ -27,7 +27,7 @@ class CreditAccountTest {
 
     @Test
     void cannotExceedCreditLimit() {
-        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
+        CreditAccount account = new CreditAccount(new AccountNumber("0000000003"), "Oleg", 1000, 5000);
 
         boolean result = account.withdraw(7000);
 
@@ -37,7 +37,7 @@ class CreditAccountTest {
 
     @Test
     void failedWithdrawDoesNotChangeBalance() {
-        CreditAccount account = new CreditAccount("333", "Oleg", 1000, 5000);
+        CreditAccount account = new CreditAccount(new AccountNumber("0000000003"), "Oleg", 1000, 5000);
         account.withdraw(5000);
 
         boolean result = account.withdraw(2000);

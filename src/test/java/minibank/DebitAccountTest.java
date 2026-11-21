@@ -7,14 +7,14 @@ class DebitAccountTest {
 
     @Test
     void initialBalanceIsStored() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         assertEquals(1000, account.getBalance(), "Начальный баланс должен сохраняться");
     }
 
     @Test
     void depositIncreasesBalance() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         account.deposit(500);
 
@@ -23,7 +23,7 @@ class DebitAccountTest {
 
     @Test
     void zeroDepositDoesNotChangeBalance() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         account.deposit(0);
 
@@ -32,7 +32,7 @@ class DebitAccountTest {
 
     @Test
     void negativeDepositDoesNotChangeBalance() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         account.deposit(-500);
 
@@ -41,7 +41,7 @@ class DebitAccountTest {
 
     @Test
     void withdrawDecreasesBalance() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         boolean result = account.withdraw(300);
 
@@ -51,7 +51,7 @@ class DebitAccountTest {
 
     @Test
     void cannotWithdrawMoreThanBalance() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         boolean result = account.withdraw(1500);
 
@@ -61,7 +61,7 @@ class DebitAccountTest {
 
     @Test
     void zeroWithdrawIsForbidden() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         boolean result = account.withdraw(0);
 
@@ -71,7 +71,7 @@ class DebitAccountTest {
 
     @Test
     void negativeWithdrawIsForbidden() {
-        DebitAccount account = new DebitAccount("111", "Ivan", 1000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 1000);
 
         boolean result = account.withdraw(-100);
 
@@ -80,11 +80,11 @@ class DebitAccountTest {
     }
     @Test
     void toStringReturnsReadableRepresentation() {
-        DebitAccount account = new DebitAccount("001", "Ivan", 10000);
+        DebitAccount account = new DebitAccount(new AccountNumber("0000000001"), "Ivan", 10000);
 
         String result = account.toString();
 
-        assertEquals("DebitAccount{number='001', owner='Ivan', balance=10000.0}", result,
+        assertEquals("DebitAccount{number='0000000001', owner='Ivan', balance=10000.0}", result,
                 "toString() должен возвращать читаемую строку с именем класса и полями");
     }
 }

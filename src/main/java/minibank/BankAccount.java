@@ -3,13 +3,16 @@ package minibank;
 import java.util.Objects;
 
 public abstract class BankAccount {
-    private final String number;
+    private final AccountNumber number;
     private final String owner;
     private double balance;
 
-    protected BankAccount(String number, String owner, double initialBalance) {
+    protected BankAccount(AccountNumber number, String owner, double initialBalance) {
         if (initialBalance < 0) {
             throw new IllegalArgumentException("Начальный баланс не может быть отрицательным");
+        }
+        if (number == null) {
+            throw new IllegalArgumentException("Номер счета не может быть null");
         }
         this.number = number;
         this.owner = owner;
@@ -32,13 +35,14 @@ public abstract class BankAccount {
         this.balance = balance;
     }
 
-    public String getNumber() { return number; }
+    public AccountNumber getNumber() { return number; }
+
     public String getOwner() { return owner; }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{" +
-                "number='" + number + '\'' +
+                "number='" + number.value() + '\'' +
                 ", owner='" + owner + '\'' +
                 ", balance=" + balance +
                 '}';
