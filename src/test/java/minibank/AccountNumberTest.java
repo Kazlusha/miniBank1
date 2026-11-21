@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountNumberTest {
     @Test
-    void validNumberIsAccepted() {
+    void validNumberIsCreated() {
         AccountNumber number = new AccountNumber("1234567890");
         assertEquals("1234567890", number.value());
     }
@@ -28,5 +28,15 @@ public class AccountNumberTest {
     @Test
     void numberWithLettersIsRejected() {
         assertThrows(IllegalArgumentException.class, () -> new AccountNumber("12345abcde"));
+    }
+
+    @Test
+    void nineDigitNumberIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> new AccountNumber("123456789"));
+    }
+
+    @Test
+    void elevenDigitNumberIsRejected() {
+        assertThrows(IllegalArgumentException.class, () -> new AccountNumber("12345678901"));
     }
 }
