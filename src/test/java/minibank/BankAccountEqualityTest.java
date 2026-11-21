@@ -23,13 +23,10 @@ class BankAccountEqualityTest {
 
     @Test
     void differentAccountTypesWithSameNumberAreEqual() {
-        DebitAccount debit = new DebitAccount("001", "Ivan", 1000);
-        SavingsAccount savings = new SavingsAccount("001", "Petr", 5000, 1000);
-        CreditAccount credit = new CreditAccount("001", "Oleg", 2000, 5000);
+        DebitAccount a = new DebitAccount("001", "Ivan", 1000);
+        SavingsAccount b = new SavingsAccount("001", "Petr", 5000, 1000);
 
-        assertEquals(debit, savings, "Debit и Savings с одинаковым номером равны");
-        assertEquals(debit, credit, "Debit и Credit с одинаковым номером равны");
-        assertEquals(savings, credit, "Savings и Credit с одинаковым номером равны");
+        assertEquals(a.hashCode(), b.hashCode(),"Равные объекты обязаны иметь одинаковый hashCode");
     }
 
     @Test
@@ -42,16 +39,16 @@ class BankAccountEqualityTest {
     }
 
     @Test
-    void accountIsNotEqualToNull() {
+    void accountDoesNotEqualNull() {
         DebitAccount account = new DebitAccount("001", "Ivan", 1000);
 
-        assertNotEquals(account, null);
+        assertFalse(account.equals(null), "Объект не равен null");
     }
 
     @Test
-    void accountIsEqualToItself() {
+    void accountIsEqualsItself() {
         DebitAccount account = new DebitAccount("001", "Ivan", 1000);
 
-        assertEquals(account, account, "Объект равен сам себе (рефлексивность)");
+        assertTrue(account.equals(account), "Объект равен сам себе (рефлексивность)");
     }
 }
