@@ -1,5 +1,7 @@
 package minibank;
 
+import java.util.Objects;
+
 public abstract class BankAccount {
     private final String number;
     private final String owner;
@@ -40,5 +42,18 @@ public abstract class BankAccount {
                 ", owner='" + owner + '\'' +
                 ", balance=" + balance +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof BankAccount)) return false;
+        BankAccount that = (BankAccount) o;
+        return Objects.equals(number, that.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number);
     }
 }
